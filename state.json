@@ -1,0 +1,45 @@
+{
+  "failures": 0,
+  "history": [
+    {
+      "schemaVersion": 1,
+      "revision": 1,
+      "status": "operational",
+      "checkedAt": "2026-10-21T09:37:55Z",
+      "validUntil": "2026-10-21T09:52:55Z",
+      "updatedAt": "2026-10-21T09:41:56Z",
+      "summary": {
+        "zh": "当前运行正常",
+        "en": "Currently operating normally"
+      },
+      "detail": {
+        "zh": "最近有效检查未发现股票行情服务异常。检查覆盖代表性样本，不保证每只股票始终准确或持续更新。",
+        "en": "Recent valid checks found no stock quote service issues. Checks cover representative samples and do not guarantee that every quote is always accurate or continuously updated."
+      },
+      "scope": {
+        "zh": "股票行情及相关更新",
+        "en": "Stock quotes and related updates"
+      }
+    }
+  ],
+  "document": {
+    "schemaVersion": 1,
+    "revision": 1,
+    "status": "operational",
+    "checkedAt": "2026-10-21T09:37:55Z",
+    "validUntil": "2026-10-21T09:52:55Z",
+    "updatedAt": "2026-10-21T09:41:56Z",
+    "summary": {
+      "zh": "当前运行正常",
+      "en": "Currently operating normally"
+    },
+    "detail": {
+      "zh": "最近有效检查未发现股票行情服务异常。检查覆盖代表性样本，不保证每只股票始终准确或持续更新。",
+      "en": "Recent valid checks found no stock quote service issues. Checks cover representative samples and do not guarantee that every quote is always accurate or continuously updated."
+    },
+    "scope": {
+      "zh": "股票行情及相关更新",
+      "en": "Stock quotes and related updates"
+    }
+  }
+}
