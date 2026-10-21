@@ -32,7 +32,10 @@ def stamp(value):
 
 
 def epoch(value):
-    return dt.datetime.fromisoformat(value.replace('Z', '+00:00')).timestamp()
+    parsed = dt.datetime.fromisoformat(value.replace('Z', '+00:00'))
+    if parsed.tzinfo is None:
+        raise ValueError('TIMEZONE_REQUIRED')
+    return parsed.timestamp()
 
 
 def fetch(url):

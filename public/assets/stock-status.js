@@ -27,7 +27,7 @@
       const set = (selector,value) => { const node=root.querySelector(selector); if(node)node.textContent=value; };
       root.querySelector('.stock-status-dot')?.setAttribute('data-state',state);
       set('[data-status-title]', titles[state][en?1:0]);
-      set('[data-status-time]', record ? (en?'Last checked: ':'最后核实：')+time(record.checkedAt,lang) : (en?'No service status received yet':'尚未获取服务状态'));
+      set('[data-status-time]', record ? (decision(record)?(en?'Announcement effective: ':'公告生效：'):(en?'Last checked: ':'最后核实：'))+time(record.checkedAt,lang) : (en?'No service status received yet':'尚未获取服务状态'));
       set('[data-status-summary]',state==='unknown' ? (en?'The latest status could not be confirmed. This does not mean normal operation or discontinued service.':'暂时无法确认最新状态，不代表服务正常或已停止。') : record?.summary[lang]);
       set('[data-status-detail]',record ? (state==='unknown'?(en?'Previous announcement: ':'上次公告：'):'')+record.detail[lang] : '');
       set('[data-status-scope]',record ? (en?'Affected: ':'影响范围：')+record.scope[lang] : '');
