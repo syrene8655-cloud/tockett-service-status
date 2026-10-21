@@ -44,10 +44,10 @@
   ],
   "document": {
     "schemaVersion": 1,
-    "revision": 128,
+    "revision": 129,
     "status": "degraded",
-    "checkedAt": "2026-10-21T23:38:55Z",
-    "validUntil": "2026-10-21T23:53:55Z",
+    "checkedAt": "2026-10-21T23:44:01Z",
+    "validUntil": "2026-10-21T23:59:01Z",
     "updatedAt": "2026-10-21T23:28:23Z",
     "summary": {
       "zh": "服务有波动",
