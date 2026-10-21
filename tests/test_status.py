@@ -79,5 +79,13 @@ class StatusTests(unittest.TestCase):
         self.assertEqual(state['document']['revision'], 2)
         self.assertEqual(len(state['history']), 1)
 
+    def test_invalid_stop_decision_cannot_silently_resume_service(self):
+        for decision in ({'status': 'suspened'}, {}, {'status': 'operational'}):
+            with self.assertRaises(ValueError): publish({}, obs(2000), True, 2000, decision)
+
+    def test_one_failed_connection_does_not_claim_quote_impact(self):
+        state = publish({}, None, False, 2000)
+        self.assertIn('尚不能确定', state['document']['detail']['zh'])
+
 
 if __name__ == '__main__': unittest.main()

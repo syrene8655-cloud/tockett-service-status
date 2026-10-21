@@ -58,6 +58,8 @@ def validate_observation(value, now):
 
 def publish(state, obs, reachable, now, decision=None):
     """Pure transition function, including confirmation and recovery hysteresis."""
+    if decision is not None and (not isinstance(decision, dict) or 'status' not in decision or decision['status'] not in (None, 'suspended', 'discontinued')):
+        raise ValueError('INVALID_OWNER_DECISION')
     old = state.get('document', {})
     if not reachable:
         if now - state.get('lastFailureAt', 0) >= 60:
@@ -95,9 +97,12 @@ def publish(state, obs, reachable, now, decision=None):
             state.pop('healthySince', None)
     summary, detail = text(*TITLES[current]), text(*DETAILS[current])
     scope = text('部分股票行情及相关更新' if current == 'degraded' else '股票行情及相关更新', 'Some stock quotes and related updates' if current == 'degraded' else 'Stock quotes and related updates')
+    if not reachable and current == 'degraded':
+        detail = text('外部连接检查暂未成功，正在等待复核。目前尚不能确定行情是否受影响。', 'An external connection check failed and is awaiting confirmation. The impact on quotes has not yet been confirmed.')
+        scope = text('股票服务连接观测；影响尚未确认', 'Stock service connection checks; impact not yet confirmed')
     if decision and decision.get('status') in ('suspended', 'discontinued'):
         for key in ('summary', 'detail', 'scope'):
-            if not all(isinstance(decision.get(key, {}).get(lang), str) and decision[key][lang].strip() for lang in ('zh', 'en')):
+            if not all(isinstance(decision.get(key, {}).get(lang), str) and decision[key][lang].strip() and len(decision[key][lang]) <= 8000 for lang in ('zh', 'en')):
                 raise ValueError('DECISION_REQUIRES_BILINGUAL_COPY')
         current, summary, detail, scope = decision['status'], decision['summary'], decision['detail'], decision['scope']
         checked, until = epoch(decision['effectiveAt']), epoch(decision['effectiveAt']) + 900
@@ -108,6 +113,8 @@ def publish(state, obs, reachable, now, decision=None):
     document = {'schemaVersion': 1, 'revision': old.get('revision', 0) + 1, 'status': current,
                 'checkedAt': stamp(checked), 'validUntil': stamp(until), 'updatedAt': updated,
                 'summary': summary, 'detail': detail, 'scope': scope}
+    if len(json.dumps(document, ensure_ascii=False).encode()) > 65_536:
+        raise ValueError('ANNOUNCEMENT_TOO_LARGE')
     if changed:
         state['history'] = (state.get('history', []) + [document])[-30:]
     state['document'] = document
