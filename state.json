@@ -24,10 +24,10 @@
   ],
   "document": {
     "schemaVersion": 1,
-    "revision": 36,
+    "revision": 37,
     "status": "operational",
-    "checkedAt": "2026-10-21T13:42:05Z",
-    "validUntil": "2026-10-21T13:57:05Z",
+    "checkedAt": "2026-10-21T13:57:32Z",
+    "validUntil": "2026-10-21T14:12:32Z",
     "updatedAt": "2026-10-21T09:41:56Z",
     "summary": {
       "zh": "当前运行正常",
