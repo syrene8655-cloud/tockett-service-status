@@ -15,7 +15,7 @@
   let record = null, failed = false, refreshing = false;
   try { const value = JSON.parse(localStorage.getItem('tockett-stock-status-v1')); if(valid(value))record=value; } catch {}
   const read = async path => {
-    const response = await fetch(base+path, {cache:'no-store',credentials:'omit',signal:AbortSignal.timeout(8000)});
+    const response = await fetch(base+path+'?v='+Date.now(), {cache:'no-store',credentials:'omit',signal:AbortSignal.timeout(8000)});
     if(!response.ok)throw Error('status unavailable');
     const raw = await response.text(); if(raw.length>65536)throw Error('status too large');
     return JSON.parse(raw);

@@ -19,3 +19,5 @@
 .status-standalone .reading-columns{display:block}
 .status-standalone .reading-body{max-width:760px}
 @media(max-width:600px){.status-standalone .masthead{height:auto;min-height:90px;padding:16px;gap:16px;flex-wrap:wrap}.status-standalone .masthead>a{max-width:100%;white-space:normal}.stock-status-heading strong{overflow-wrap:anywhere}}
+
+.help-intro .stock-status-entry{margin-top:20px;display:flex;width:fit-content;font-size:16px;line-height:1.6}
