@@ -64,10 +64,10 @@
   ],
   "document": {
     "schemaVersion": 1,
-    "revision": 293,
+    "revision": 294,
     "status": "operational",
-    "checkedAt": "2026-10-22T13:44:23Z",
-    "validUntil": "2026-10-22T13:59:23Z",
+    "checkedAt": "2026-10-22T13:49:27Z",
+    "validUntil": "2026-10-22T14:04:27Z",
     "updatedAt": "2026-10-22T01:34:22Z",
     "summary": {
       "zh": "当前运行正常",
