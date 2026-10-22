@@ -1,6 +1,7 @@
 """Independent public status publisher. Uses no server or phone credentials."""
 import datetime as dt
 import json
+import ssl
 import time
 import urllib.request
 from pathlib import Path
@@ -40,7 +41,12 @@ def epoch(value):
 
 def fetch(url):
     request = urllib.request.Request(url, headers={'Accept': 'application/json', 'User-Agent': 'Tockett-Public-Status/1'})
-    with urllib.request.urlopen(request, timeout=12) as response:
+    class NoRedirect(urllib.request.HTTPRedirectHandler):
+        def redirect_request(self, *args):
+            raise ValueError('REDIRECT_REJECTED')
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect(),
+                                        urllib.request.HTTPSHandler(context=ssl.create_default_context()))
+    with opener.open(request, timeout=8) as response:
         data = response.read(65_537)
         if response.status != 200 or len(data) > 65_536:
             raise ValueError('INVALID_RESPONSE')
@@ -48,6 +54,8 @@ def fetch(url):
 
 
 def validate_observation(value, now):
+    if not isinstance(value, dict):
+        raise ValueError('INVALID_OBSERVATION')
     checked, valid = epoch(value['checkedAt']), epoch(value['validUntil'])
     if value.get('schemaVersion') != 1 or value.get('status') not in STATES - {'suspended', 'discontinued'}:
         raise ValueError('INVALID_OBSERVATION')
@@ -121,17 +129,14 @@ def publish(state, obs, reachable, now, decision=None):
     return state
 
 
-def main():
-    state_path = ROOT / 'state.json'
-    state = json.loads(state_path.read_text()) if state_path.exists() else {}
-    now = time.time()
-    decision = json.loads((ROOT / 'decision.json').read_text())
+def observe(now):
+    """Direct Hong Kong checks, independent of any website publisher."""
     reachable, obs = False, None
     try:
         # Health alone never proves working quotes. The observation contains
         # only exported maintenance verdicts, not credentials or diagnostics.
         health = fetch('https://api.tockett.work/health')
-        reachable = health.get('ok') is True
+        reachable = isinstance(health, dict) and health.get('ok') is True
     except (OSError, ValueError, KeyError):
         pass
     if reachable:
@@ -139,13 +144,42 @@ def main():
             obs = validate_observation(fetch('https://api.tockett.work/status-observation.json'), now)
         except (OSError, ValueError, KeyError, TypeError):
             pass
-    state = publish(state, obs, reachable, now, decision)
-    state_path.write_text(json.dumps(state, ensure_ascii=False, indent=2) + '\n')
+    return reachable, obs
+
+
+def main():
+    # GitHub only mirrors Shanghai. It never produces an independent verdict.
+    state_path = ROOT / 'state.json'
+    document = fetch('https://shanghai-tencent.tail5ba9ea.ts.net/service-status/status.json')
+    validate_public_document(document, time.time())
+    history = fetch('https://shanghai-tencent.tail5ba9ea.ts.net/service-status/history.json')
+    if not isinstance(history, list) or len(history) > 30:
+        raise ValueError('INVALID_HISTORY')
+    for item in history:
+        validate_public_document(item, time.time(), allow_expired=True)
+    state_path.write_text(json.dumps({'document': document, 'history': history}, ensure_ascii=False, indent=2) + '\n')
     public = ROOT / 'public'
     public.mkdir(exist_ok=True)
-    (public / 'status.json').write_text(json.dumps(state['document'], ensure_ascii=False, indent=2) + '\n')
-    (public / 'history.json').write_text(json.dumps(state.get('history', []), ensure_ascii=False, indent=2) + '\n')
-    print('Published consumer-safe status:', state['document']['status'])
+    (public / 'status.json').write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n')
+    (public / 'history.json').write_text(json.dumps(history, ensure_ascii=False, indent=2) + '\n')
+    print('Mirrored Shanghai status:', document['status'])
+
+
+def validate_public_document(value, now, allow_expired=False):
+    if not isinstance(value, dict) or value.get('schemaVersion') != 1 or value.get('status') not in STATES:
+        raise ValueError('INVALID_PUBLIC_DOCUMENT')
+    revision = value.get('revision')
+    if type(revision) is not int or not 0 < revision <= 9007199254740991:
+        raise ValueError('INVALID_REVISION')
+    checked, until, updated = (epoch(value[k]) for k in ('checkedAt', 'validUntil', 'updatedAt'))
+    if checked > now + 300 or updated > now + 300 or not checked <= until <= checked + 900:
+        raise ValueError('INVALID_PUBLIC_TIME')
+    if not allow_expired and value['status'] not in ('suspended', 'discontinued') and now >= until:
+        raise ValueError('EXPIRED_PUBLIC_DOCUMENT')
+    for key in ('summary', 'detail', 'scope'):
+        if not all(isinstance(value.get(key, {}).get(lang), str) and 0 < len(value[key][lang]) <= 8000 for lang in ('zh', 'en')):
+            raise ValueError('INVALID_PUBLIC_COPY')
+    return value
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 /* Consumer-facing status; no quote requests or credentials. */
 (() => {
-  const base = 'https://status.tockett.work/';
+  const base = 'https://shanghai-tencent.tail5ba9ea.ts.net/service-status/';
   const titles = {
     operational:['当前运行正常','Currently operating normally'], degraded:['服务有波动','Service disruptions'],
     outage:['服务故障','Service outage'], suspended:['服务已暂停','Service suspended'],

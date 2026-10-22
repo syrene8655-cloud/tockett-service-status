@@ -26,7 +26,7 @@ jobs:
           ref: main
       - name: Check status transitions
         run: python3 -m unittest discover -s tests -v
-      - name: Observe and build status
+      - name: Mirror Shanghai status (not a health check)
         run: python3 collect.py
       - name: Preserve observation and event history
         run: |
