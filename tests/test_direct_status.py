@@ -104,7 +104,8 @@ class DirectStatusTests(unittest.TestCase):
         state = collect.publish({}, sample(2000), True, 2000)
         value = state['document']
         self.assertEqual(collect.validate_public_document(value, 2000), value)
-        for changed in ({'revision': True}, {'validUntil': collect.stamp(4000)}, {'summary': {}}):
+        for changed in ({'revision': True}, {'validUntil': collect.stamp(4000)},
+                        {'summary': {}}, {'summary': 'invalid'}, {'checkedAt': None}):
             with self.assertRaises(ValueError):
                 collect.validate_public_document(dict(value, **changed), 2000)
         with self.assertRaises(ValueError):

@@ -33,6 +33,8 @@ def stamp(value):
 
 
 def epoch(value):
+    if not isinstance(value, str):
+        raise ValueError('TIME_STRING_REQUIRED')
     parsed = dt.datetime.fromisoformat(value.replace('Z', '+00:00'))
     if parsed.tzinfo is None:
         raise ValueError('TIMEZONE_REQUIRED')
@@ -177,7 +179,8 @@ def validate_public_document(value, now, allow_expired=False):
     if not allow_expired and value['status'] not in ('suspended', 'discontinued') and now >= until:
         raise ValueError('EXPIRED_PUBLIC_DOCUMENT')
     for key in ('summary', 'detail', 'scope'):
-        if not all(isinstance(value.get(key, {}).get(lang), str) and 0 < len(value[key][lang]) <= 8000 for lang in ('zh', 'en')):
+        localized = value.get(key)
+        if not isinstance(localized, dict) or not all(isinstance(localized.get(lang), str) and 0 < len(localized[lang]) <= 8000 for lang in ('zh', 'en')):
             raise ValueError('INVALID_PUBLIC_COPY')
     return value
 
