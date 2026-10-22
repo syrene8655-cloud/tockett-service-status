@@ -5,6 +5,7 @@ import sys
 import tempfile
 import unittest
 from unittest.mock import patch
+from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -33,12 +34,22 @@ class DirectStatusTests(unittest.TestCase):
 
     def test_publication_checks_live_delivery_as_well_as_old_app_copy(self):
         document = collect.publish({}, sample(2000), True, 2000)['document']
-        with patch.object(collect, 'fetch', return_value=document) as fetch:
+        with patch.object(monitor, 'fetch_live_delivery', return_value=document) as live, patch.object(collect, 'fetch', return_value=document) as fetch:
             self.assertEqual(monitor.check_publication(2000)[0], 'operational')
+            live.assert_called_once_with(2000)
             self.assertEqual([c.args[0].split('?')[0] for c in fetch.call_args_list],
-                             [monitor.DIRECT_URL, monitor.STATUS_URL])
-        with patch.object(collect, 'fetch', side_effect=OSError('live delivery down')):
-            self.assertEqual(monitor.check_publication(2000)[0], 'unavailable')
+                             [monitor.STATUS_URL])
+        with patch.object(monitor, 'fetch_live_delivery', side_effect=OSError('live delivery down')):
+            self.assertEqual(monitor.check_publication(2000), ('unavailable', 'live_delivery_unavailable_or_expired'))
+        with patch.object(monitor, 'fetch_live_delivery', return_value=document), patch.object(collect, 'fetch', side_effect=OSError('old copy down')):
+            self.assertEqual(monitor.check_publication(2000), ('unavailable', 'compatibility_copy_unavailable_or_expired'))
+
+    def test_public_delivery_refuses_split_dns_private_address(self):
+        dns = SimpleNamespace(returncode=0, stdout='100.89.134.70\n127.0.0.1\n')
+        with patch.object(monitor.subprocess, 'run', return_value=dns), patch.object(monitor.socket, 'create_connection') as connect:
+            with self.assertRaisesRegex(ValueError, 'PUBLIC_INGRESS_REQUIRED'):
+                monitor.fetch_live_delivery(2000)
+            connect.assert_not_called()
 
     def test_website_failure_does_not_turn_stock_service_red(self):
         sent = []

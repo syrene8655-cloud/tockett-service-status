@@ -3,14 +3,19 @@
 import argparse
 import datetime as dt
 import fcntl
+import http.client
+import ipaddress
 import json
 import os
 from pathlib import Path
 import smtplib
 import ssl
+import socket
+import subprocess
 import time
 from email.message import EmailMessage
 from email.utils import formataddr, parseaddr
+from urllib.parse import urlsplit
 import collect
 
 STATUS_URL = 'https://status.tockett.work/status.json'
@@ -77,15 +82,61 @@ def write_public(state, directory):
         os.replace(temporary, path)
 
 
+def fetch_live_delivery(now):
+    """Use public Funnel ingress, not this node's split-DNS private address.
+
+    Keep the original hostname for both SNI and certificate verification.
+    No system DNS, routing, TLS policy or other site's nginx is changed.
+    """
+    url = urlsplit(DIRECT_URL)
+    host = url.hostname
+    result = subprocess.run(['/bin/dig', '+short', '+time=2', '+tries=1',
+                             '@119.29.29.29', host, 'A'],
+                            capture_output=True, text=True, timeout=3)
+    if result.returncode or len(result.stdout) > 4096:
+        raise ValueError('PUBLIC_DNS_FAILED')
+    addresses = []
+    for line in result.stdout.splitlines():
+        try:
+            address = ipaddress.ip_address(line)
+        except ValueError:
+            continue
+        if address.version == 4 and address.is_global:
+            addresses.append(str(address))
+    if not addresses:
+        raise ValueError('PUBLIC_INGRESS_REQUIRED')
+    context = ssl.create_default_context()
+    connection = http.client.HTTPSConnection(host, timeout=5, context=context)
+    try:
+        raw = socket.create_connection((addresses[int(now // 60) % len(addresses)], 443), timeout=5)
+        try:
+            connection.sock = context.wrap_socket(raw, server_hostname=host)
+        except Exception:
+            raw.close()
+            raise
+        connection.request('GET', url.path + '?publication=' + str(int(now)),
+                           headers={'Accept': 'application/json', 'User-Agent': 'Tockett-Status-Alert/2'})
+        response = connection.getresponse()
+        body = response.read(MAX_BYTES + 1)
+        if response.status != 200 or len(body) > MAX_BYTES:
+            raise ValueError('INVALID_PUBLIC_DELIVERY')
+        return json.loads(body)
+    finally:
+        connection.close()
+
+
 def check_publication(now):
     """Check live delivery and the compatibility copy, never stock health."""
     try:
-        for url in (DIRECT_URL, STATUS_URL):
-            document = collect.fetch(url + '?publication=' + str(int(now)))
-            collect.validate_public_document(document, now)
-        return 'operational', 'live_and_compatibility_copy_fresh'
+        collect.validate_public_document(fetch_live_delivery(now), now)
+    except (OSError, ValueError, KeyError, TypeError, http.client.HTTPException, subprocess.SubprocessError):
+        return 'unavailable', 'live_delivery_unavailable_or_expired'
+    try:
+        document = collect.fetch(STATUS_URL + '?publication=' + str(int(now)))
+        collect.validate_public_document(document, now)
     except (OSError, ValueError, KeyError, TypeError):
-        return 'unavailable', 'public_delivery_unavailable_or_expired'
+        return 'unavailable', 'compatibility_copy_unavailable_or_expired'
+    return 'operational', 'live_and_compatibility_copy_fresh'
 
 
 def next_notice(state, observed):
@@ -173,7 +224,9 @@ def run(config, state_dir=STATE_DIR, *, observation=None, now=None, sender=send_
             page.update(last_observed=page_observed, last_reason=page_reason,
                         last_check_at=state['last_check_at'])
             if page_notice:
-                subject = '状态网页发布恢复' if page_notice == 'operational' else '状态网页发布异常'
+                subject = ('状态发布恢复' if page_notice == 'operational' else
+                           '旧版App状态副本更新延迟' if page_reason.startswith('compatibility_copy') else
+                           '状态网页数据读取异常')
                 # Separate subject: this is not a stock outage or repair request.
                 try:
                     page_config = dict(config, subject_prefix='[Tockett Status Page] ')
