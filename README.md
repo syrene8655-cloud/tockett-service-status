@@ -29,7 +29,7 @@ it does not check Hong Kong or create a separate verdict. Old App builds keep us
 this compatibility copy until their endpoint is updated in a new installed build.
 A delayed copy can still expire in those App builds; it cannot trigger a stock alert.
 
-A separate publication check observes the old public copy. After three failures it sends
+A separate publication check observes both the live Shanghai delivery and the old App copy. After three failures it sends
 `[Tockett Status Page]` mail and a separate `status-publication` Grok event. This is not a
 stock outage or a direct Codex repair authorization. Recovery also needs three checks.
 Stock notices retain `[Tockett Status]` and the existing confirmation/deduplication rules.

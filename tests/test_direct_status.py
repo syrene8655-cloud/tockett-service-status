@@ -31,6 +31,15 @@ class DirectStatusTests(unittest.TestCase):
         self.assertEqual(requested, ['https://api.tockett.work/health',
                                      'https://api.tockett.work/status-observation.json'])
 
+    def test_publication_checks_live_delivery_as_well_as_old_app_copy(self):
+        document = collect.publish({}, sample(2000), True, 2000)['document']
+        with patch.object(collect, 'fetch', return_value=document) as fetch:
+            self.assertEqual(monitor.check_publication(2000)[0], 'operational')
+            self.assertEqual([c.args[0].split('?')[0] for c in fetch.call_args_list],
+                             [monitor.DIRECT_URL, monitor.STATUS_URL])
+        with patch.object(collect, 'fetch', side_effect=OSError('live delivery down')):
+            self.assertEqual(monitor.check_publication(2000)[0], 'unavailable')
+
     def test_website_failure_does_not_turn_stock_service_red(self):
         sent = []
         with tempfile.TemporaryDirectory() as directory:

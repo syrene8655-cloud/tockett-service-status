@@ -78,13 +78,14 @@ def write_public(state, directory):
 
 
 def check_publication(now):
-    """A stale mirror is a publication fault, never a stock-service verdict."""
+    """Check live delivery and the compatibility copy, never stock health."""
     try:
-        document = collect.fetch(STATUS_URL + '?publication=' + str(int(now)))
-        collect.validate_public_document(document, now)
-        return 'operational', 'public_copy_fresh'
+        for url in (DIRECT_URL, STATUS_URL):
+            document = collect.fetch(url + '?publication=' + str(int(now)))
+            collect.validate_public_document(document, now)
+        return 'operational', 'live_and_compatibility_copy_fresh'
     except (OSError, ValueError, KeyError, TypeError):
-        return 'unavailable', 'public_copy_unavailable_or_expired'
+        return 'unavailable', 'public_delivery_unavailable_or_expired'
 
 
 def next_notice(state, observed):
