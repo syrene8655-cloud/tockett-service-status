@@ -29,6 +29,18 @@ it does not check Hong Kong or create a separate verdict. Old App builds keep us
 this compatibility copy until their endpoint is updated in a new installed build.
 A delayed copy can still expire in those App builds; it cannot trigger a stock alert.
 
+2026-10-23: static publication (`status.yml`, push/manual) and compatibility data
+refresh (`mirror.yml`, five-minute schedule/manual) now run separately. Static code
+publication renders the last saved state without any live data request, preserving
+all original observation/expiry times even when expired. The data workflow retains
+strict validation, bounded retries, visible failures and the legacy App endpoint.
+Both workflows share one publication concurrency group and checkout latest main
+after admission so neither can overwrite newer static code with an older checkout.
+The Mac backup trigger checks for queued/running work in either workflow before
+requesting `mirror.yml`; it never treats a successful dispatch as a finished refresh.
+Pages still requires a complete site artifact for compatibility data deployment;
+this does not yet remove periodic deployment while old App builds use that address.
+
 The GitHub compatibility mirror retries transient TLS EOF, connection/timeout,
 temporary DNS and HTTP 408/429/500/502/503/504 failures up to four attempts per
 document, waiting 2/5/10 seconds. Certificate errors, invalid data and expired
