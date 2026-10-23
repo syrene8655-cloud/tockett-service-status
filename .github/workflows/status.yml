@@ -27,6 +27,7 @@ jobs:
       - name: Check status transitions
         run: python3 -m unittest discover -s tests -v
       - name: Mirror Shanghai status (not a health check)
+        timeout-minutes: 2
         run: python3 collect.py
       - name: Preserve observation and event history
         run: |

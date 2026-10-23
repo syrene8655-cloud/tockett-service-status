@@ -1,12 +1,16 @@
 """Independent public status publisher. Uses no server or phone credentials."""
 import datetime as dt
+import http.client
 import json
+import socket
 import ssl
 import time
+import urllib.error
 import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).parent
+MIRROR_RETRY_DELAYS = (2, 5, 10)
 STATES = {'operational', 'degraded', 'outage', 'suspended', 'discontinued', 'unknown'}
 TITLES = {
     'operational': ('当前运行正常', 'Currently operating normally'),
@@ -53,6 +57,34 @@ def fetch(url):
         if response.status != 200 or len(data) > 65_536:
             raise ValueError('INVALID_RESPONSE')
         return json.loads(data)
+
+
+def fetch_mirror(url):
+    """Retry transient mirror transport failures without changing stock checks."""
+    attempts = len(MIRROR_RETRY_DELAYS) + 1
+    for attempt in range(1, attempts + 1):
+        try:
+            value = fetch(url)
+        except (OSError, http.client.HTTPException) as error:
+            reason = error.reason if isinstance(error, urllib.error.URLError) else error
+            if isinstance(error, urllib.error.HTTPError):
+                transient = error.code in (408, 429, 500, 502, 503, 504)
+                category = 'HTTP_' + str(error.code)
+            else:
+                transient = (isinstance(reason, (ssl.SSLEOFError, TimeoutError, ConnectionError,
+                                               http.client.IncompleteRead)) or
+                             isinstance(reason, socket.gaierror) and reason.errno == socket.EAI_AGAIN)
+                category = type(reason).__name__
+            if not transient or attempt == attempts:
+                print(f'Mirror fetch failed: attempt={attempt}/{attempts} error={category}', flush=True)
+                raise
+            delay = MIRROR_RETRY_DELAYS[attempt - 1]
+            print(f'Mirror fetch retry: attempt={attempt}/{attempts} error={category} delay={delay}s', flush=True)
+            time.sleep(delay)
+        else:
+            if attempt > 1:
+                print(f'Mirror fetch recovered: attempt={attempt}/{attempts}', flush=True)
+            return value
 
 
 def validate_observation(value, now):
@@ -152,19 +184,24 @@ def observe(now):
 def main():
     # GitHub only mirrors Shanghai. It never produces an independent verdict.
     state_path = ROOT / 'state.json'
-    document = fetch('https://shanghai-tencent.tail5ba9ea.ts.net/service-status/status.json')
+    document = fetch_mirror('https://shanghai-tencent.tail5ba9ea.ts.net/service-status/status.json')
     validate_public_document(document, time.time())
-    history = fetch('https://shanghai-tencent.tail5ba9ea.ts.net/service-status/history.json')
+    history = fetch_mirror('https://shanghai-tencent.tail5ba9ea.ts.net/service-status/history.json')
     if not isinstance(history, list) or len(history) > 30:
         raise ValueError('INVALID_HISTORY')
+    # History retries may outlive the current observation. Never extend its life.
+    now = time.time()
+    validate_public_document(document, now)
     for item in history:
-        validate_public_document(item, time.time(), allow_expired=True)
+        validate_public_document(item, now, allow_expired=True)
     state_path.write_text(json.dumps({'document': document, 'history': history}, ensure_ascii=False, indent=2) + '\n')
     public = ROOT / 'public'
     public.mkdir(exist_ok=True)
     (public / 'status.json').write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n')
     (public / 'history.json').write_text(json.dumps(history, ensure_ascii=False, indent=2) + '\n')
-    print('Mirrored Shanghai status:', document['status'])
+    print('Mirrored Shanghai status:', document['status'],
+          'checkedAt=' + document['checkedAt'], 'validUntil=' + document['validUntil'],
+          'ageSeconds=' + str(int(now - epoch(document['checkedAt']))))
 
 
 def validate_public_document(value, now, allow_expired=False):

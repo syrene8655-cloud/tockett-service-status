@@ -29,6 +29,16 @@ it does not check Hong Kong or create a separate verdict. Old App builds keep us
 this compatibility copy until their endpoint is updated in a new installed build.
 A delayed copy can still expire in those App builds; it cannot trigger a stock alert.
 
+The GitHub compatibility mirror retries transient TLS EOF, connection/timeout,
+temporary DNS and HTTP 408/429/500/502/503/504 failures up to four attempts per
+document, waiting 2/5/10 seconds. Certificate errors, invalid data and expired
+observations fail without retry. The mirror step has a two-minute workflow limit;
+the original eight-second socket timeout and strict certificate validation remain.
+The current observation is validated again after downloading history, so retry
+time cannot publish an expired green state. Exhausted retries still fail the run
+and retain GitHub failure notifications. Direct stock checks do not use this retry
+path or change their confirmation/recovery rules.
+
 A separate publication check observes both the live Shanghai delivery and the old App copy.
 On Shanghai, the live probe explicitly resolves public Funnel ingress through DNSPod
 119.29.29.29, rejecting private addresses, while retaining the original TLS hostname
