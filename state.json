@@ -1,22 +1,22 @@
 {
   "document": {
     "schemaVersion": 1,
-    "revision": 1792683493,
-    "status": "operational",
-    "checkedAt": "2026-10-24T13:14:08Z",
-    "validUntil": "2026-10-24T13:29:08Z",
-    "updatedAt": "2026-10-24T09:48:05Z",
+    "revision": 1792683498,
+    "status": "degraded",
+    "checkedAt": "2026-10-24T13:24:21Z",
+    "validUntil": "2026-10-24T13:39:21Z",
+    "updatedAt": "2026-10-24T13:24:30Z",
     "summary": {
-      "zh": "当前运行正常",
-      "en": "Currently operating normally"
+      "zh": "服务有波动",
+      "en": "Service disruptions"
     },
     "detail": {
-      "zh": "最近有效检查未发现股票行情服务异常。检查覆盖代表性样本，不保证每只股票始终准确或持续更新。",
-      "en": "Recent valid checks found no stock quote service issues. Checks cover representative samples and do not guarantee that every quote is always accurate or continuously updated."
+      "zh": "部分行情或服务连接存在波动，或正在观察恢复情况。没有有效报价时显示横线；目前没有确定的恢复时间。",
+      "en": "Some quotes or service connections are disrupted, or recovery is being monitored. Dashes indicate no valid quote. There is no confirmed recovery time."
     },
     "scope": {
-      "zh": "股票行情及相关更新",
-      "en": "Stock quotes and related updates"
+      "zh": "部分股票行情及相关更新",
+      "en": "Some stock quotes and related updates"
     }
   },
   "history": [
@@ -239,6 +239,26 @@
       },
       "updatedAt": "2026-10-24T09:48:05Z",
       "validUntil": "2026-10-24T09:59:52Z"
+    },
+    {
+      "schemaVersion": 1,
+      "revision": 1792683498,
+      "status": "degraded",
+      "checkedAt": "2026-10-24T13:24:21Z",
+      "validUntil": "2026-10-24T13:39:21Z",
+      "updatedAt": "2026-10-24T13:24:30Z",
+      "summary": {
+        "zh": "服务有波动",
+        "en": "Service disruptions"
+      },
+      "detail": {
+        "zh": "部分行情或服务连接存在波动，或正在观察恢复情况。没有有效报价时显示横线；目前没有确定的恢复时间。",
+        "en": "Some quotes or service connections are disrupted, or recovery is being monitored. Dashes indicate no valid quote. There is no confirmed recovery time."
+      },
+      "scope": {
+        "zh": "部分股票行情及相关更新",
+        "en": "Some stock quotes and related updates"
+      }
     }
   ]
 }
