@@ -1,11 +1,11 @@
 {
   "document": {
     "schemaVersion": 1,
-    "revision": 1792685694,
+    "revision": 1792685699,
     "status": "operational",
-    "checkedAt": "2026-10-26T03:58:15Z",
-    "validUntil": "2026-10-26T04:13:15Z",
-    "updatedAt": "2026-10-24T20:05:50Z",
+    "checkedAt": "2026-10-26T04:03:21Z",
+    "validUntil": "2026-10-26T04:18:21Z",
+    "updatedAt": "2026-10-26T04:04:55Z",
     "summary": {
       "zh": "当前运行正常",
       "en": "Currently operating normally"
@@ -359,6 +359,46 @@
       },
       "updatedAt": "2026-10-24T20:05:50Z",
       "validUntil": "2026-10-24T20:17:14Z"
+    },
+    {
+      "checkedAt": "2026-10-26T04:03:55Z",
+      "detail": {
+        "en": "An external connection check failed and is awaiting confirmation. The impact on quotes has not yet been confirmed.",
+        "zh": "外部连接检查暂未成功，正在等待复核。目前尚不能确定行情是否受影响。"
+      },
+      "revision": 1792685695,
+      "schemaVersion": 1,
+      "scope": {
+        "en": "Stock service connection checks; impact not yet confirmed",
+        "zh": "股票服务连接观测；影响尚未确认"
+      },
+      "status": "degraded",
+      "summary": {
+        "en": "Service disruptions",
+        "zh": "服务有波动"
+      },
+      "updatedAt": "2026-10-26T04:03:55Z",
+      "validUntil": "2026-10-26T04:18:55Z"
+    },
+    {
+      "checkedAt": "2026-10-26T04:03:21Z",
+      "detail": {
+        "en": "Recent valid checks found no stock quote service issues. Checks cover representative samples and do not guarantee that every quote is always accurate or continuously updated.",
+        "zh": "最近有效检查未发现股票行情服务异常。检查覆盖代表性样本，不保证每只股票始终准确或持续更新。"
+      },
+      "revision": 1792685696,
+      "schemaVersion": 1,
+      "scope": {
+        "en": "Stock quotes and related updates",
+        "zh": "股票行情及相关更新"
+      },
+      "status": "operational",
+      "summary": {
+        "en": "Currently operating normally",
+        "zh": "当前运行正常"
+      },
+      "updatedAt": "2026-10-26T04:04:55Z",
+      "validUntil": "2026-10-26T04:18:21Z"
     }
   ]
 }
