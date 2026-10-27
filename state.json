@@ -1,11 +1,11 @@
 {
   "document": {
     "schemaVersion": 1,
-    "revision": 1792687688,
+    "revision": 1792687693,
     "status": "operational",
-    "checkedAt": "2026-10-27T15:04:31Z",
-    "validUntil": "2026-10-27T15:19:31Z",
-    "updatedAt": "2026-10-27T13:48:35Z",
+    "checkedAt": "2026-10-27T15:09:35Z",
+    "validUntil": "2026-10-27T15:24:35Z",
+    "updatedAt": "2026-10-27T15:13:10Z",
     "summary": {
       "zh": "当前运行正常",
       "en": "Currently operating normally"
@@ -559,6 +559,46 @@
       },
       "updatedAt": "2026-10-27T13:48:35Z",
       "validUntil": "2026-10-27T14:03:01Z"
+    },
+    {
+      "checkedAt": "2026-10-27T15:09:35Z",
+      "detail": {
+        "en": "Some quotes or service connections are disrupted, or recovery is being monitored. Dashes indicate no valid quote. There is no confirmed recovery time.",
+        "zh": "部分行情或服务连接存在波动，或正在观察恢复情况。没有有效报价时显示横线；目前没有确定的恢复时间。"
+      },
+      "revision": 1792687690,
+      "schemaVersion": 1,
+      "scope": {
+        "en": "Some stock quotes and related updates",
+        "zh": "部分股票行情及相关更新"
+      },
+      "status": "degraded",
+      "summary": {
+        "en": "Service disruptions",
+        "zh": "服务有波动"
+      },
+      "updatedAt": "2026-10-27T15:11:01Z",
+      "validUntil": "2026-10-27T15:24:35Z"
+    },
+    {
+      "checkedAt": "2026-10-27T15:09:35Z",
+      "detail": {
+        "en": "Recent valid checks found no stock quote service issues. Checks cover representative samples and do not guarantee that every quote is always accurate or continuously updated.",
+        "zh": "最近有效检查未发现股票行情服务异常。检查覆盖代表性样本，不保证每只股票始终准确或持续更新。"
+      },
+      "revision": 1792687692,
+      "schemaVersion": 1,
+      "scope": {
+        "en": "Stock quotes and related updates",
+        "zh": "股票行情及相关更新"
+      },
+      "status": "operational",
+      "summary": {
+        "en": "Currently operating normally",
+        "zh": "当前运行正常"
+      },
+      "updatedAt": "2026-10-27T15:13:10Z",
+      "validUntil": "2026-10-27T15:24:35Z"
     }
   ]
 }
