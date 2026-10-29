@@ -1,45 +1,25 @@
 {
   "document": {
     "schemaVersion": 1,
-    "revision": 1792690433,
-    "status": "degraded",
-    "checkedAt": "2026-10-29T15:25:20Z",
-    "validUntil": "2026-10-29T15:40:20Z",
-    "updatedAt": "2026-10-29T15:27:00Z",
+    "revision": 1792690438,
+    "status": "operational",
+    "checkedAt": "2026-10-29T15:30:40Z",
+    "validUntil": "2026-10-29T15:45:40Z",
+    "updatedAt": "2026-10-29T15:28:01Z",
     "summary": {
-      "zh": "服务有波动",
-      "en": "Service disruptions"
+      "zh": "当前运行正常",
+      "en": "Currently operating normally"
     },
     "detail": {
-      "zh": "部分行情或服务连接存在波动，或正在观察恢复情况。没有有效报价时显示横线；目前没有确定的恢复时间。",
-      "en": "Some quotes or service connections are disrupted, or recovery is being monitored. Dashes indicate no valid quote. There is no confirmed recovery time."
+      "zh": "最近有效检查未发现股票行情服务异常。检查覆盖代表性样本，不保证每只股票始终准确或持续更新。",
+      "en": "Recent valid checks found no stock quote service issues. Checks cover representative samples and do not guarantee that every quote is always accurate or continuously updated."
     },
     "scope": {
-      "zh": "部分股票行情及相关更新",
-      "en": "Some stock quotes and related updates"
+      "zh": "股票行情及相关更新",
+      "en": "Stock quotes and related updates"
     }
   },
   "history": [
-    {
-      "checkedAt": "2026-10-24T18:55:58Z",
-      "detail": {
-        "en": "Recent valid checks found no stock quote service issues. Checks cover representative samples and do not guarantee that every quote is always accurate or continuously updated.",
-        "zh": "最近有效检查未发现股票行情服务异常。检查覆盖代表性样本，不保证每只股票始终准确或持续更新。"
-      },
-      "revision": 1792683815,
-      "schemaVersion": 1,
-      "scope": {
-        "en": "Stock quotes and related updates",
-        "zh": "股票行情及相关更新"
-      },
-      "status": "operational",
-      "summary": {
-        "en": "Currently operating normally",
-        "zh": "当前运行正常"
-      },
-      "updatedAt": "2026-10-24T18:59:10Z",
-      "validUntil": "2026-10-24T19:10:58Z"
-    },
     {
       "checkedAt": "2026-10-24T20:02:14Z",
       "detail": {
@@ -601,24 +581,44 @@
       "validUntil": "2026-10-29T15:35:00Z"
     },
     {
-      "schemaVersion": 1,
-      "revision": 1792690433,
-      "status": "degraded",
       "checkedAt": "2026-10-29T15:25:20Z",
-      "validUntil": "2026-10-29T15:40:20Z",
-      "updatedAt": "2026-10-29T15:27:00Z",
-      "summary": {
-        "zh": "服务有波动",
-        "en": "Service disruptions"
-      },
       "detail": {
-        "zh": "部分行情或服务连接存在波动，或正在观察恢复情况。没有有效报价时显示横线；目前没有确定的恢复时间。",
-        "en": "Some quotes or service connections are disrupted, or recovery is being monitored. Dashes indicate no valid quote. There is no confirmed recovery time."
+        "en": "Some quotes or service connections are disrupted, or recovery is being monitored. Dashes indicate no valid quote. There is no confirmed recovery time.",
+        "zh": "部分行情或服务连接存在波动，或正在观察恢复情况。没有有效报价时显示横线；目前没有确定的恢复时间。"
       },
+      "revision": 1792690433,
+      "schemaVersion": 1,
       "scope": {
-        "zh": "部分股票行情及相关更新",
-        "en": "Some stock quotes and related updates"
-      }
+        "en": "Some stock quotes and related updates",
+        "zh": "部分股票行情及相关更新"
+      },
+      "status": "degraded",
+      "summary": {
+        "en": "Service disruptions",
+        "zh": "服务有波动"
+      },
+      "updatedAt": "2026-10-29T15:27:00Z",
+      "validUntil": "2026-10-29T15:40:20Z"
+    },
+    {
+      "checkedAt": "2026-10-29T15:25:20Z",
+      "detail": {
+        "en": "Recent valid checks found no stock quote service issues. Checks cover representative samples and do not guarantee that every quote is always accurate or continuously updated.",
+        "zh": "最近有效检查未发现股票行情服务异常。检查覆盖代表性样本，不保证每只股票始终准确或持续更新。"
+      },
+      "revision": 1792690434,
+      "schemaVersion": 1,
+      "scope": {
+        "en": "Stock quotes and related updates",
+        "zh": "股票行情及相关更新"
+      },
+      "status": "operational",
+      "summary": {
+        "en": "Currently operating normally",
+        "zh": "当前运行正常"
+      },
+      "updatedAt": "2026-10-29T15:28:01Z",
+      "validUntil": "2026-10-29T15:40:20Z"
     }
   ]
 }
