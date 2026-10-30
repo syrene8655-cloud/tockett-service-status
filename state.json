@@ -1,10 +1,10 @@
 {
   "document": {
     "schemaVersion": 1,
-    "revision": 1792691269,
+    "revision": 1792691273,
     "status": "operational",
-    "checkedAt": "2026-10-30T06:06:50Z",
-    "validUntil": "2026-10-30T06:21:50Z",
+    "checkedAt": "2026-10-30T06:11:55Z",
+    "validUntil": "2026-10-30T06:26:55Z",
     "updatedAt": "2026-10-30T01:03:45Z",
     "summary": {
       "zh": "当前运行正常",
