@@ -1,10 +1,10 @@
 {
   "document": {
     "schemaVersion": 1,
-    "revision": 1792691595,
+    "revision": 1792691600,
     "status": "degraded",
-    "checkedAt": "2026-10-30T11:53:01Z",
-    "validUntil": "2026-10-30T12:08:01Z",
+    "checkedAt": "2026-10-30T11:58:21Z",
+    "validUntil": "2026-10-30T12:13:21Z",
     "updatedAt": "2026-10-30T11:55:10Z",
     "summary": {
       "zh": "服务有波动",
@@ -601,24 +601,24 @@
       "validUntil": "2026-10-30T01:16:07Z"
     },
     {
-      "schemaVersion": 1,
-      "revision": 1792691595,
-      "status": "degraded",
       "checkedAt": "2026-10-30T11:53:01Z",
-      "validUntil": "2026-10-30T12:08:01Z",
-      "updatedAt": "2026-10-30T11:55:10Z",
-      "summary": {
-        "zh": "服务有波动",
-        "en": "Service disruptions"
-      },
       "detail": {
-        "zh": "部分行情或服务连接存在波动，或正在观察恢复情况。没有有效报价时显示横线；目前没有确定的恢复时间。",
-        "en": "Some quotes or service connections are disrupted, or recovery is being monitored. Dashes indicate no valid quote. There is no confirmed recovery time."
+        "en": "Some quotes or service connections are disrupted, or recovery is being monitored. Dashes indicate no valid quote. There is no confirmed recovery time.",
+        "zh": "部分行情或服务连接存在波动，或正在观察恢复情况。没有有效报价时显示横线；目前没有确定的恢复时间。"
       },
+      "revision": 1792691595,
+      "schemaVersion": 1,
       "scope": {
-        "zh": "部分股票行情及相关更新",
-        "en": "Some stock quotes and related updates"
-      }
+        "en": "Some stock quotes and related updates",
+        "zh": "部分股票行情及相关更新"
+      },
+      "status": "degraded",
+      "summary": {
+        "en": "Service disruptions",
+        "zh": "服务有波动"
+      },
+      "updatedAt": "2026-10-30T11:55:10Z",
+      "validUntil": "2026-10-30T12:08:01Z"
     }
   ]
 }
