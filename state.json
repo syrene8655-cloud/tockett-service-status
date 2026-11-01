@@ -1,10 +1,10 @@
 {
   "document": {
     "schemaVersion": 1,
-    "revision": 1792694986,
+    "revision": 1792694991,
     "status": "degraded",
-    "checkedAt": "2026-11-01T23:41:25Z",
-    "validUntil": "2026-11-01T23:56:25Z",
+    "checkedAt": "2026-11-01T23:46:31Z",
+    "validUntil": "2026-11-02T00:01:31Z",
     "updatedAt": "2026-11-01T23:31:45Z",
     "summary": {
       "zh": "服务有波动",
