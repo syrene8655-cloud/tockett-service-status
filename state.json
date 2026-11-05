@@ -1,10 +1,10 @@
 {
   "document": {
     "schemaVersion": 1,
-    "revision": 1792699088,
+    "revision": 1792699097,
     "status": "operational",
-    "checkedAt": "2026-11-04T23:52:21Z",
-    "validUntil": "2026-11-05T00:07:21Z",
+    "checkedAt": "2026-11-04T23:57:25Z",
+    "validUntil": "2026-11-05T00:12:25Z",
     "updatedAt": "2026-11-04T23:53:10Z",
     "summary": {
       "zh": "当前运行正常",
@@ -601,24 +601,24 @@
       "validUntil": "2026-11-04T23:47:02Z"
     },
     {
-      "schemaVersion": 1,
-      "revision": 1792699088,
-      "status": "operational",
       "checkedAt": "2026-11-04T23:52:21Z",
-      "validUntil": "2026-11-05T00:07:21Z",
-      "updatedAt": "2026-11-04T23:53:10Z",
-      "summary": {
-        "zh": "当前运行正常",
-        "en": "Currently operating normally"
-      },
       "detail": {
-        "zh": "最近有效检查未发现股票行情服务异常。检查覆盖代表性样本，不保证每只股票始终准确或持续更新。",
-        "en": "Recent valid checks found no stock quote service issues. Checks cover representative samples and do not guarantee that every quote is always accurate or continuously updated."
+        "en": "Recent valid checks found no stock quote service issues. Checks cover representative samples and do not guarantee that every quote is always accurate or continuously updated.",
+        "zh": "最近有效检查未发现股票行情服务异常。检查覆盖代表性样本，不保证每只股票始终准确或持续更新。"
       },
+      "revision": 1792699088,
+      "schemaVersion": 1,
       "scope": {
-        "zh": "股票行情及相关更新",
-        "en": "Stock quotes and related updates"
-      }
+        "en": "Stock quotes and related updates",
+        "zh": "股票行情及相关更新"
+      },
+      "status": "operational",
+      "summary": {
+        "en": "Currently operating normally",
+        "zh": "当前运行正常"
+      },
+      "updatedAt": "2026-11-04T23:53:10Z",
+      "validUntil": "2026-11-05T00:07:21Z"
     }
   ]
 }
